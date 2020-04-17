@@ -12,6 +12,7 @@ import java.util.Properties;
 public class ResourcesLoader {
 
     private static final String WINDOW_PROPERTIES_FILE_NAME = "window.properties";
+    private static final String SIMULATION_PROPERTIES_FILE_NAME = "simulation.properties";
 
     public static Properties loadWindowProperties() {
 
@@ -27,6 +28,25 @@ public class ResourcesLoader {
             inputStream.close();
         } catch (IOException e) {
            log.error("Couldn't read window.properties file: ", e);
+        }
+
+        return configuration;
+    }
+
+    public static Properties loadSimulationProperties() {
+
+        Properties configuration = new Properties();
+
+        try {
+            InputStream inputStream = ResourcesLoader.class
+                    .getClassLoader()
+                    .getResourceAsStream(SIMULATION_PROPERTIES_FILE_NAME);
+            assert inputStream != null;
+
+            configuration.load(inputStream);
+            inputStream.close();
+        } catch (IOException e) {
+            log.error("Couldn't read simulation.properties file: ", e);
         }
 
         return configuration;

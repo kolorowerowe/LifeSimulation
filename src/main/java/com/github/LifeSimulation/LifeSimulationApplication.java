@@ -1,8 +1,8 @@
 package com.github.LifeSimulation;
 
 
-import com.github.LifeSimulation.simulation.SimulationCore;
-import com.github.LifeSimulation.simulation.Window;
+import com.github.LifeSimulation.core.SimulationCore;
+import com.github.LifeSimulation.core.Window;
 
 import lombok.extern.log4j.Log4j;
 
@@ -11,8 +11,10 @@ public class LifeSimulationApplication {
 
     public static void main(String[] args) {
 
-        SimulationCore simulation = new SimulationCore();
-        new Window(simulation);
+        Window window = new Window();
+        SimulationCore simulation = new SimulationCore(window.getDimension());
+
+        window.addCanvas(simulation);
         simulation.start();
 
         log.info("Life Simulation Application has started");
