@@ -4,12 +4,20 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.awt.Graphics;
+import java.util.Random;
+
+import static com.github.LifeSimulation.utils.ResourcesLoader.getWindowHeight;
+import static com.github.LifeSimulation.utils.ResourcesLoader.getWindowWidth;
 
 @Getter
 @Setter
 public abstract class SimulationObject {
     private Integer x;
     private Integer y;
+
+    public SimulationObject() {
+        setRandomPosition();
+    }
 
     public SimulationObject(Integer x, Integer y) {
         this.x = x;
@@ -18,5 +26,11 @@ public abstract class SimulationObject {
 
     public abstract void tick();
     public abstract void render(Graphics g);
+
+    private void setRandomPosition(){
+        Random random = new Random();
+        this.x = random.nextInt(getWindowWidth());
+        this.y = random.nextInt(getWindowHeight());
+    }
 
 }

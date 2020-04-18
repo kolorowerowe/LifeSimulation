@@ -12,7 +12,7 @@ public class LifeSimulationApplication {
     public static void main(String[] args) {
 
         Window window = new Window();
-        SimulationCore simulation = new SimulationCore(window.getDimension());
+        SimulationCore simulation = new SimulationCore();
 
         window.addCanvas(simulation);
         simulation.start();

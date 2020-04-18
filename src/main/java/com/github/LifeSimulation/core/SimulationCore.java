@@ -3,10 +3,12 @@ package com.github.LifeSimulation.core;
 import lombok.extern.log4j.Log4j;
 
 import java.awt.Canvas;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.image.BufferStrategy;
+
+import static com.github.LifeSimulation.utils.ResourcesLoader.getWindowHeight;
+import static com.github.LifeSimulation.utils.ResourcesLoader.getWindowWidth;
 
 @Log4j
 public class SimulationCore extends Canvas implements Runnable {
@@ -17,13 +19,11 @@ public class SimulationCore extends Canvas implements Runnable {
     private Boolean running;
 
     private ObjectsHandler objectsHandler;
-    private Dimension dimension;
 
     private static final Integer MAX_FPS = 60;
 
-    public SimulationCore(Dimension dimension) {
+    public SimulationCore() {
         this.objectsHandler = new ObjectsHandler();
-        this.dimension = dimension;
     }
 
     public synchronized void start()
@@ -75,7 +75,7 @@ public class SimulationCore extends Canvas implements Runnable {
         Graphics g = bs.getDrawGraphics();
 
         g.setColor(Color.black);
-        g.fillRect(0,0, dimension.width, dimension.height);
+        g.fillRect(0,0, getWindowWidth(), getWindowHeight());
 
         objectsHandler.render(g);
 

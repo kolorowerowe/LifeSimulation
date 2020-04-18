@@ -2,21 +2,21 @@ package com.github.LifeSimulation.core;
 
 import com.github.LifeSimulation.objects.SimpleDot;
 import com.github.LifeSimulation.objects.SimulationObject;
-import com.github.LifeSimulation.utils.ResourcesLoader;
 
 import java.awt.Graphics;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.github.LifeSimulation.utils.ResourcesLoader.getInitNumberOfSimpleDots;
+
 public class ObjectsHandler {
     private List<SimulationObject> simulationObjectList = new LinkedList();
 
     public ObjectsHandler() {
-        int numberOfSimpleDots = Integer.parseInt(
-                ResourcesLoader.loadSimulationProperties().getProperty("initNumberOfSimpleDots"));
+        int numberOfSimpleDots = getInitNumberOfSimpleDots();
 
         for(Integer i=0; i<numberOfSimpleDots; i++) {
-           addObjectToSimulation(new SimpleDot(30, 30));
+           addObjectToSimulation(new SimpleDot());
         }
     }
 
