@@ -1,7 +1,5 @@
 package com.github.LifeSimulation.utils;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j;
 
 import java.io.IOException;
@@ -38,6 +36,14 @@ public class ResourcesLoader {
 
     public static Integer getWindowHeight(){
         return Integer.parseInt(windowProperties.getProperty("height"));
+    }
+
+    public static Integer getWorldWidth(){
+        return Integer.parseInt(windowProperties.getProperty("worldWidth"));
+    }
+
+    public static Integer getWorldHeight(){
+        return Integer.parseInt(windowProperties.getProperty("worldHeight"));
     }
 
     public static String getApplicationName(){

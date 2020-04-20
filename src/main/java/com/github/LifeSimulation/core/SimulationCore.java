@@ -7,53 +7,61 @@ import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.image.BufferStrategy;
 
-import static com.github.LifeSimulation.utils.ResourcesLoader.getWindowHeight;
-import static com.github.LifeSimulation.utils.ResourcesLoader.getWindowWidth;
+import static com.github.LifeSimulation.utils.ResourcesLoader.*;
 
 @Log4j
 public class SimulationCore extends Canvas implements Runnable {
 
-    private Long t1;
-    private Long t2 = 0L;
+    private Long nowTime;
+    private Long oldTime = 0L;
+    private Long lastKeyTime = 0L;
+
+
     private Thread thread;
     private Boolean running;
 
-    private ObjectsHandler objectsHandler;
+    private final ObjectsHandler objectsHandler = new ObjectsHandler();
+    private final Statistics statistics = Statistics.getInstance();
+    private final InputHandler inputHandler = InputHandler.getInstance();
+
+    private SimulationState simulationState;
 
     private static final Integer MAX_FPS = 60;
 
     public SimulationCore() {
-        this.objectsHandler = new ObjectsHandler();
+        simulationState = SimulationState.PAUSED;
+        addKeyListener(inputHandler);
     }
 
-    public synchronized void start()
-    {
+    public synchronized void start() {
         thread = new Thread(this);
         thread.start();
         running = true;
+        simulationState = SimulationState.RUNNING;
     }
 
-    public synchronized void stop()
-    {
-        try{
+    public synchronized void stop() {
+        try {
             thread.join();
             running = false;
-        }
-        catch (Exception e) {
-            log.error("En error occurred when joining threads ",e);
+        } catch (Exception e) {
+            log.error("En error occurred when joining threads ", e);
         }
     }
 
     public void run() {
         while (running) {
-            t1 = System.currentTimeMillis();
-            if ((t1 - t2) > 1000/MAX_FPS) {
-                t2 = t1;
+            nowTime = System.currentTimeMillis();
+            if ((nowTime - oldTime) > 1000 / MAX_FPS) {
+                oldTime = nowTime;
+                update();
                 render();
             } else {
                 try {
                     Thread.sleep(4);
-                    tick();
+                    if (simulationState == SimulationState.RUNNING) {
+                        tick();
+                    }
                 } catch (InterruptedException e) {
                     log.error("En error occurred: ", e);
                 }
@@ -62,21 +70,40 @@ public class SimulationCore extends Canvas implements Runnable {
         }
     }
 
-    private void tick(){
+    private void tick() {
         objectsHandler.tick();
     }
 
-    private void render(){
+    private void update() {
+        inputHandler.update();
+
+        if (nowTime - lastKeyTime > 200){
+            if (inputHandler.isPausePressed()) {
+                if (simulationState == SimulationState.RUNNING) {
+                    simulationState = SimulationState.PAUSED;
+                    log.info("Simulation paused");
+                } else if (simulationState == SimulationState.PAUSED) {
+                    simulationState = SimulationState.RUNNING;
+                    log.info("Simulation running");
+                }
+                lastKeyTime = nowTime;
+            }
+        }
+
+    }
+
+    private void render() {
         BufferStrategy bs = this.getBufferStrategy();
-        if(bs==null){
+        if (bs == null) {
             this.createBufferStrategy(3);
             return;
         }
         Graphics g = bs.getDrawGraphics();
 
         g.setColor(Color.black);
-        g.fillRect(0,0, getWindowWidth(), getWindowHeight());
+        g.fillRect(0, 0, getWindowWidth(), getWindowHeight());
 
+        statistics.render(g);
         objectsHandler.render(g);
 
         g.dispose();

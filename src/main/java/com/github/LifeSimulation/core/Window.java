@@ -20,6 +20,7 @@ public class Window extends Canvas {
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         frame.setResizable(false);
         frame.setVisible(true);
+        frame.setAutoRequestFocus(true);
     }
 
     public void addCanvas(Canvas canvas) {

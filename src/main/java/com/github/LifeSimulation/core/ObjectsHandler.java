@@ -7,16 +7,22 @@ import java.awt.Graphics;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.github.LifeSimulation.utils.ResourcesLoader.getInitNumberOfSimpleDots;
+import static com.github.LifeSimulation.utils.ResourcesLoader.*;
 
 public class ObjectsHandler {
     private List<SimulationObject> simulationObjectList = new LinkedList();
+    private Statistics statistics;
 
     public ObjectsHandler() {
+        this.statistics = Statistics.getInstance();
+        populateFromInitProperties();
+    }
+
+    private void populateFromInitProperties(){
         int numberOfSimpleDots = getInitNumberOfSimpleDots();
 
         for(Integer i=0; i<numberOfSimpleDots; i++) {
-           addObjectToSimulation(new SimpleDot());
+            addObjectToSimulation(new SimpleDot());
         }
     }
 
@@ -25,6 +31,7 @@ public class ObjectsHandler {
     }
 
     public void tick() {
+        statistics.setCountOfObjects(simulationObjectList.size());
         for (SimulationObject simulationObject : simulationObjectList) {
             simulationObject.tick();
         }
