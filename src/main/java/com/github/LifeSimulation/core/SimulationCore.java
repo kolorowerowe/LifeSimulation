@@ -103,7 +103,7 @@ public class SimulationCore extends Canvas implements Runnable {
         g.setColor(Color.black);
         g.fillRect(0, 0, getWindowWidth(), getWindowHeight());
 
-        statistics.render(g);
+        statistics.render(g, simulationState);
         objectsHandler.render(g);
 
         g.dispose();
