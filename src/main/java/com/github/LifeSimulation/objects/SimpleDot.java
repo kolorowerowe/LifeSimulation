@@ -6,23 +6,35 @@ import lombok.Setter;
 import java.awt.Graphics;
 import java.awt.Color;
 
+import static com.github.LifeSimulation.utils.ResourcesLoader.getWorldHeight;
+import static com.github.LifeSimulation.utils.ResourcesLoader.getWorldWidth;
+
 @Getter
 @Setter
-public class SimpleDot extends SimulationObject{
+public class SimpleDot extends SimulationObject {
 
     private Integer moveX;
     private Integer moveY;
 
+    private Double probabilityToMove;
+    private Color color;
+
+
     public SimpleDot() {
         super();
-        this.moveX = 1;
-        this.moveY = 1;
+        init();
     }
 
-    public SimpleDot(int x, int y) {
+    public SimpleDot(Integer x, Integer y) {
         super(x, y);
+        init();
+    }
+
+    private void init() {
+        this.probabilityToMove = random.nextDouble();
         this.moveX = 1;
         this.moveY = 1;
+        this.color = Color.CYAN;
     }
 
     public void tick() {
@@ -30,12 +42,26 @@ public class SimpleDot extends SimulationObject{
     }
 
     public void render(Graphics g) {
-        g.setColor(Color.CYAN);
-        g.fillRect(getX(),getY(),15,15);
+        g.setColor(color);
+        g.fillRect(getX(), getY(), getWidth(), getHeight());
     }
 
-    private void move(){
-        setX(getX()+moveX);
-        setY(getY()+moveY);
+    private void move() {
+        if (random.nextDouble() < probabilityToMove) {
+            Integer newXPos = getX() + moveX;
+            if (newXPos <= 0 || newXPos + getWidth() >= getWorldWidth()) {
+                moveX = -moveX;
+            } else {
+                setX(newXPos);
+            }
+
+            Integer newYPos = getY() + moveY;
+            if (newYPos <= 0 || newYPos + getHeight() >= getWorldHeight()) {
+                moveY = -moveY;
+            } else {
+                setY(newYPos);
+            }
+        }
+
     }
 }
