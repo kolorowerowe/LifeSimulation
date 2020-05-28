@@ -54,5 +54,9 @@ public class ResourcesLoader {
         return Integer.parseInt(simulationProperties.getProperty("initNumberOfSimpleDots"));
     }
 
+    public static Integer getTicksForYear(){
+        return Integer.parseInt(simulationProperties.getProperty("ticksForYear"));
+    }
+
 
 }

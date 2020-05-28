@@ -15,6 +15,10 @@ public class Statistics {
     @Setter
     private Integer countOfObjects = 0;
 
+    @Getter
+    @Setter
+    private Integer year = 0;
+
     private static final Integer LEFT_POSITION = getWorldWidth() + 10;
 
     private Statistics() {
@@ -34,7 +38,8 @@ public class Statistics {
         g.setColor(Color.black);
         g.setFont(new Font("Arial", Font.PLAIN, 14 ));
         g.drawString("Simulation state: " + state.toString().toLowerCase(), LEFT_POSITION, 20);
-        g.drawString("Count of objects: " + countOfObjects, LEFT_POSITION, 40);
+        g.drawString("Simulation year: " + year, LEFT_POSITION, 40);
+        g.drawString("Count of objects: " + countOfObjects, LEFT_POSITION, 60);
 
         g.drawString("P - pause/run", LEFT_POSITION, 500);
 

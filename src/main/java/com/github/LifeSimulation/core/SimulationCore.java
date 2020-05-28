@@ -16,6 +16,9 @@ public class SimulationCore extends Canvas implements Runnable {
     private Long oldTime = 0L;
     private Long lastKeyTime = 0L;
 
+    private Integer ticksForYear = getTicksForYear();
+    private Integer ticksInCurrentYear = 0;
+    private Integer currentYear = 0;
 
     private Thread thread;
     private Boolean running;
@@ -71,13 +74,19 @@ public class SimulationCore extends Canvas implements Runnable {
     }
 
     private void tick() {
+        ticksInCurrentYear++;
+        if (ticksInCurrentYear >= ticksForYear) {
+            ticksInCurrentYear = 0;
+            currentYear++;
+            statistics.setYear(currentYear);
+        }
         objectsHandler.tick();
     }
 
     private void update() {
         inputHandler.update();
 
-        if (nowTime - lastKeyTime > 200){
+        if (nowTime - lastKeyTime > 200) {
             if (inputHandler.isPausePressed()) {
                 if (simulationState == SimulationState.RUNNING) {
                     simulationState = SimulationState.PAUSED;
