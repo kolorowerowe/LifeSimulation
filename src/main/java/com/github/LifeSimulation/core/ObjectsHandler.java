@@ -22,8 +22,12 @@ public class ObjectsHandler {
         int numberOfSimpleEntities = getInitNumberOfSimpleEntities();
 
         for(Integer i=0; i<numberOfSimpleEntities; i++) {
-            addObjectToSimulation(new SimpleEntity());
+            addObjectToSimulation();
         }
+    }
+
+    public void addObjectToSimulation() {
+        simulationObjectList.add(new SimpleEntity());
     }
 
     private void addObjectToSimulation(SimulationObject object) {

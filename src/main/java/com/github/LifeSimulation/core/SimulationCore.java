@@ -98,8 +98,12 @@ public class SimulationCore extends Canvas implements Runnable {
                 }
                 lastKeyTime = nowTime;
             }
-        }
 
+            if (inputHandler.isAPressed()) {
+                objectsHandler.addObjectToSimulation();
+                lastKeyTime = nowTime;
+            }
+        }
     }
 
     private void render() {

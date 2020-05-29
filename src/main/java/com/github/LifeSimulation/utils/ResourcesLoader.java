@@ -1,5 +1,6 @@
 package com.github.LifeSimulation.utils;
 
+import lombok.Getter;
 import lombok.extern.log4j.Log4j;
 
 import java.io.IOException;
@@ -15,6 +16,41 @@ public class ResourcesLoader {
     private static final Properties windowProperties = loadPropertiesFromFile(WINDOW_PROPERTIES_FILE_NAME);
     private static final Properties simulationProperties = loadPropertiesFromFile(SIMULATION_PROPERTIES_FILE_NAME);
 
+    // SIMULATION PROPERTIES
+    @Getter
+    private static final Integer initNumberOfSimpleEntities = Integer.parseInt(simulationProperties.getProperty("initNumberOfSimpleEntities"));
+    @Getter
+    private static final Integer ticksForYear = Integer.parseInt(simulationProperties.getProperty("ticksForYear"));
+    @Getter
+    private static final Integer maxLifeAge = Integer.parseInt(simulationProperties.getProperty("maxLifeAge"));
+    @Getter
+    private static final Integer middleAgeThreshold = Integer.parseInt(simulationProperties.getProperty("displayDeathTime"));
+    @Getter
+    private static final Integer oldAgeThreshold = Integer.parseInt(simulationProperties.getProperty("oldAgeThreshold"));
+    @Getter
+    private static final Integer displayDeathTime = Integer.parseInt(simulationProperties.getProperty("middleAgeThreshold"));
+
+    //WINDOW PROPERTIES //TODO 29.05: refactor as above
+    public static Integer getWindowWidth() {
+        return Integer.parseInt(windowProperties.getProperty("width"));
+    }
+
+    public static Integer getWindowHeight() {
+        return Integer.parseInt(windowProperties.getProperty("height"));
+    }
+
+    public static Integer getWorldWidth() {
+        return Integer.parseInt(windowProperties.getProperty("worldWidth"));
+    }
+
+    public static Integer getWorldHeight() {
+        return Integer.parseInt(windowProperties.getProperty("worldHeight"));
+    }
+
+    public static String getApplicationName() {
+        return windowProperties.getProperty("name");
+    }
+
     private static Properties loadPropertiesFromFile(String fileName) {
         Properties configuration = new Properties();
         try {
@@ -29,43 +65,6 @@ public class ResourcesLoader {
         }
         return configuration;
     }
-
-    public static Integer getWindowWidth(){
-        return Integer.parseInt(windowProperties.getProperty("width"));
-    }
-
-    public static Integer getWindowHeight(){
-        return Integer.parseInt(windowProperties.getProperty("height"));
-    }
-
-    public static Integer getWorldWidth(){
-        return Integer.parseInt(windowProperties.getProperty("worldWidth"));
-    }
-
-    public static Integer getWorldHeight(){
-        return Integer.parseInt(windowProperties.getProperty("worldHeight"));
-    }
-
-    public static String getApplicationName(){
-        return windowProperties.getProperty("name");
-    }
-
-    public static Integer getInitNumberOfSimpleEntities(){
-        return Integer.parseInt(simulationProperties.getProperty("initNumberOfSimpleEntities"));
-    }
-
-    public static Integer getTicksForYear(){
-        return Integer.parseInt(simulationProperties.getProperty("ticksForYear"));
-    }
-
-    public static Integer getMaxLifeAge(){
-        return Integer.parseInt(simulationProperties.getProperty("maxLifeAge"));
-    }
-
-    public static Integer getDisplayDeathTime(){
-        return Integer.parseInt(simulationProperties.getProperty("displayDeathTime"));
-    }
-
 
 
 }

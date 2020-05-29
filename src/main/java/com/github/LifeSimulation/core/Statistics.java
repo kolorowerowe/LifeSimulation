@@ -71,7 +71,7 @@ public class Statistics {
 
         g.setFont(getRegularFont());
         g.drawString("P - pause/run", LEFT_POSITION, 530);
-
+        g.drawString("A - add new entity", LEFT_POSITION, 550);
     }
 
     private Font getHeaderFont(){

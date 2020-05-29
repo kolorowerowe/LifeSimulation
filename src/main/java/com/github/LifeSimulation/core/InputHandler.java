@@ -1,31 +1,28 @@
 package com.github.LifeSimulation.core;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+@Getter
 public final class InputHandler implements KeyListener {
 
+    @Getter(AccessLevel.NONE)
     private static InputHandler INSTANCE;
 
+    @Getter(AccessLevel.NONE)
     private boolean[] keys = new boolean[1000];
 
-    @Getter
     private boolean isUpPressed = false;
-    @Getter
     private boolean isDownPressed = false;
-    @Getter
     private boolean isLeftPressed = false;
-    @Getter
     private boolean isRightPressed = false;
-    @Getter
     private boolean isUsePressed = false;
-    @Getter
     private boolean isPausePressed = false;
-    @Getter
+    private boolean isAPressed = false;
     private boolean isOKPressed = false;
-    @Getter
     private boolean isCancelPressed = false;
 
     private InputHandler() {
@@ -49,6 +46,7 @@ public final class InputHandler implements KeyListener {
         isCancelPressed = keys[KeyEvent.VK_X];
         isUsePressed = keys[KeyEvent.VK_SPACE];
         isPausePressed = keys[KeyEvent.VK_P];
+        isAPressed = keys[KeyEvent.VK_A];
     }
 
     @Override
