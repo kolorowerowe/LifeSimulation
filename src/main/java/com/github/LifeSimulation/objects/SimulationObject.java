@@ -1,5 +1,6 @@
 package com.github.LifeSimulation.objects;
 
+import com.github.LifeSimulation.core.Statistics;
 import javafx.scene.control.RadioMenuItem;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,11 +19,14 @@ public abstract class SimulationObject {
     private Integer height;
 
     protected Random random = new Random();
+    protected Statistics statistics;
 
     public SimulationObject() {
         setRandomPosition();
         this.width = 10;
         this.height = 10;
+
+        this.statistics = Statistics.getInstance();
     }
 
     public SimulationObject(Integer x, Integer y) {
@@ -31,6 +35,8 @@ public abstract class SimulationObject {
 
         this.width = 10;
         this.height = 10;
+
+        this.statistics = getStatistics();
     }
 
     public SimulationObject(Integer x, Integer y, Integer width, Integer height) {
@@ -39,6 +45,8 @@ public abstract class SimulationObject {
 
         this.width = width;
         this.height = height;
+
+        this.statistics = getStatistics();
     }
 
     public abstract void tick();

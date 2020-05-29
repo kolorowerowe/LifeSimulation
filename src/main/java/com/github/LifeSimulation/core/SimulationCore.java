@@ -1,5 +1,6 @@
 package com.github.LifeSimulation.core;
 
+import com.github.LifeSimulation.enums.SimulationState;
 import lombok.extern.log4j.Log4j;
 
 import java.awt.Canvas;

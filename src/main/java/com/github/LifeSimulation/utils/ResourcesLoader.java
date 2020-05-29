@@ -50,13 +50,22 @@ public class ResourcesLoader {
         return windowProperties.getProperty("name");
     }
 
-    public static Integer getInitNumberOfSimpleDots(){
-        return Integer.parseInt(simulationProperties.getProperty("initNumberOfSimpleDots"));
+    public static Integer getInitNumberOfSimpleEntities(){
+        return Integer.parseInt(simulationProperties.getProperty("initNumberOfSimpleEntities"));
     }
 
     public static Integer getTicksForYear(){
         return Integer.parseInt(simulationProperties.getProperty("ticksForYear"));
     }
+
+    public static Integer getMaxLifeAge(){
+        return Integer.parseInt(simulationProperties.getProperty("maxLifeAge"));
+    }
+
+    public static Integer getDisplayDeathTime(){
+        return Integer.parseInt(simulationProperties.getProperty("displayDeathTime"));
+    }
+
 
 
 }

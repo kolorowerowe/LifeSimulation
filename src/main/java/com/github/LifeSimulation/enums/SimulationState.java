@@ -1,4 +1,4 @@
-package com.github.LifeSimulation.core;
+package com.github.LifeSimulation.enums;
 
 public enum SimulationState {
 

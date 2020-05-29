@@ -1,6 +1,6 @@
 package com.github.LifeSimulation.core;
 
-import com.github.LifeSimulation.objects.SimpleDot;
+import com.github.LifeSimulation.objects.SimpleEntity;
 import com.github.LifeSimulation.objects.SimulationObject;
 
 import java.awt.Graphics;
@@ -19,10 +19,10 @@ public class ObjectsHandler {
     }
 
     private void populateFromInitProperties(){
-        int numberOfSimpleDots = getInitNumberOfSimpleDots();
+        int numberOfSimpleEntities = getInitNumberOfSimpleEntities();
 
-        for(Integer i=0; i<numberOfSimpleDots; i++) {
-            addObjectToSimulation(new SimpleDot());
+        for(Integer i=0; i<numberOfSimpleEntities; i++) {
+            addObjectToSimulation(new SimpleEntity());
         }
     }
 
@@ -31,7 +31,6 @@ public class ObjectsHandler {
     }
 
     public void tick() {
-        statistics.setCountOfObjects(simulationObjectList.size());
         for (SimulationObject simulationObject : simulationObjectList) {
             simulationObject.tick();
         }
