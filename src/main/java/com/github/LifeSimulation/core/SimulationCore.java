@@ -23,7 +23,6 @@ public class SimulationCore extends Canvas implements Runnable {
 
     private Integer ticksForYear = getTicksForYear();
     private Integer ticksInCurrentYear = 0;
-    private Integer currentYear = 0;
 
     private final float CAMERA_MOVE_MULTIPLIER = 0.008f;
     private final float CAMERA_ZOOM_MULTIPLIER = 1.03f;
@@ -44,6 +43,8 @@ public class SimulationCore extends Canvas implements Runnable {
     private int nextStatisticsPrintDelay = 0;
 
     private static final Integer MAX_FPS = 60;
+
+    private boolean computeAsFastAsPossible = false;
 
     public SimulationCore() {
         simulationState = SimulationState.PAUSED;
@@ -68,28 +69,27 @@ public class SimulationCore extends Canvas implements Runnable {
 
     public void run() {
         while (running) {
-            nowTime = System.currentTimeMillis();
-            if ((nowTime - oldTime) > 1000 / MAX_FPS) {
-                oldTime = nowTime;
+            if (computeAsFastAsPossible) {
+                nowTime = System.currentTimeMillis();
                 update();
-                render();
-                if (nextStatisticsPrintDelay > 0) {
-                    nextStatisticsPrintDelay--;
-                } else {
-                    nextStatisticsPrintDelay = 59;
-                    statistics.outputStatistics();
-                }
+                tick();
             } else {
-                try {
-                    Thread.sleep(4);
-                    if (simulationState == SimulationState.RUNNING) {
-                        tick();
+                nowTime = System.currentTimeMillis();
+                if ((nowTime - oldTime) > 1000 / MAX_FPS) {
+                    oldTime = nowTime;
+                    update();
+                    render();
+                } else {
+                    try {
+                        Thread.sleep(4);
+                        if (simulationState == SimulationState.RUNNING) {
+                            tick();
+                        }
+                    } catch (InterruptedException e) {
+                        log.error("An error occurred: ", e);
                     }
-                } catch (InterruptedException e) {
-                    log.error("An error occurred: ", e);
                 }
             }
-
         }
     }
 
@@ -97,8 +97,7 @@ public class SimulationCore extends Canvas implements Runnable {
         ticksInCurrentYear++;
         if (ticksInCurrentYear >= ticksForYear) {
             ticksInCurrentYear = 0;
-            currentYear++;
-            statistics.setYear(currentYear);
+            statistics.increaseYear();
         }
         environment.growFood(getFoodGrowthDensity());
         objectsManager.tick(environment);
@@ -122,6 +121,17 @@ public class SimulationCore extends Canvas implements Runnable {
             if (inputHandler.isOPressed()) {
                 objectsManager.addObjectToSimulation();
                 lastKeyTime = nowTime;
+            }
+
+            if (inputHandler.isLPressed()) {
+                lastKeyTime = nowTime;
+                if (computeAsFastAsPossible) {
+                    log.info("Simulation executing normally");
+                    computeAsFastAsPossible = false;
+                } else {
+                    log.info("Simulation as fast as possible");
+                    computeAsFastAsPossible = true;
+                }
             }
         }
         if (inputHandler.isLeftPressed()) {

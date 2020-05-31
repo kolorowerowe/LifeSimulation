@@ -42,13 +42,6 @@ public class Statistics {
         return INSTANCE;
     }
 
-    public void outputStatistics() {
-        fileOutput.print(countOfLivingObjects);
-        fileOutput.print(",");
-        fileOutput.println(countOfDeadObjects);
-        fileOutput.flush();
-    }
-
     public void increaseCountOfLivingObjects(){
         this.countOfLivingObjects++;
     }
@@ -63,6 +56,10 @@ public class Statistics {
 
     public void increaseYear(){
         this.year++;
+        fileOutput.print(countOfLivingObjects);
+        fileOutput.print(",");
+        fileOutput.println(countOfDeadObjects);
+        fileOutput.flush();
     }
 
     public void render(Graphics g, Canvas canvas, SimulationState state) {
@@ -90,6 +87,7 @@ public class Statistics {
         g.drawString("Q, E - zoom", left_position, 350);
         g.drawString("P - pause/run", left_position, 370);
         g.drawString("O - add new entity", left_position, 390);
+        g.drawString("L - compute as fast as possible", left_position, 410);
     }
 
     private Font getHeaderFont(){
