@@ -18,7 +18,7 @@ public class Window extends Canvas {
         frame.setSize(getWindowWidth(), getWindowHeight());
         frame.setVisible(true);
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        frame.setResizable(false);
+        //frame.setResizable(false);
         frame.setVisible(true);
         frame.setAutoRequestFocus(true);
     }

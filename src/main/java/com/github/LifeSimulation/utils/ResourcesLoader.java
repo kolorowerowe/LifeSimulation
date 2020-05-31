@@ -18,38 +18,31 @@ public class ResourcesLoader {
 
     // SIMULATION PROPERTIES
     @Getter
-    private static final Integer initNumberOfSimpleEntities = Integer.parseInt(simulationProperties.getProperty("initNumberOfSimpleEntities"));
+    private static final int initNumberOfSimpleEntities = Integer.parseInt(simulationProperties.getProperty("initNumberOfSimpleEntities"));
     @Getter
-    private static final Integer ticksForYear = Integer.parseInt(simulationProperties.getProperty("ticksForYear"));
+    private static final int ticksForYear = Integer.parseInt(simulationProperties.getProperty("ticksForYear"));
     @Getter
-    private static final Integer maxLifeAge = Integer.parseInt(simulationProperties.getProperty("maxLifeAge"));
+    private static final int maxLifeAge = Integer.parseInt(simulationProperties.getProperty("maxLifeAge"));
     @Getter
-    private static final Integer middleAgeThreshold = Integer.parseInt(simulationProperties.getProperty("displayDeathTime"));
+    private static final int adultThreshold = Integer.parseInt(simulationProperties.getProperty("adultThreshold"));
     @Getter
-    private static final Integer oldAgeThreshold = Integer.parseInt(simulationProperties.getProperty("oldAgeThreshold"));
+    private static final int oldAgeThreshold = Integer.parseInt(simulationProperties.getProperty("oldAgeThreshold"));
     @Getter
-    private static final Integer displayDeathTime = Integer.parseInt(simulationProperties.getProperty("middleAgeThreshold"));
-
-    //WINDOW PROPERTIES //TODO 29.05: refactor as above
-    public static Integer getWindowWidth() {
-        return Integer.parseInt(windowProperties.getProperty("width"));
-    }
-
-    public static Integer getWindowHeight() {
-        return Integer.parseInt(windowProperties.getProperty("height"));
-    }
-
-    public static Integer getWorldWidth() {
-        return Integer.parseInt(windowProperties.getProperty("worldWidth"));
-    }
-
-    public static Integer getWorldHeight() {
-        return Integer.parseInt(windowProperties.getProperty("worldHeight"));
-    }
-
-    public static String getApplicationName() {
-        return windowProperties.getProperty("name");
-    }
+    private static final int displayDeathTime = Integer.parseInt(simulationProperties.getProperty("displayDeathTime"));
+    @Getter
+    private static final float foodGrowthDensity = Float.parseFloat(simulationProperties.getProperty("foodGrowthDensity"));
+    @Getter
+    private static final float maximumFoodOnTheGround = Float.parseFloat(simulationProperties.getProperty("maximumFoodOnTheGround"));
+    @Getter
+    private static final int windowWidth = Integer.parseInt(windowProperties.getProperty("windowWidth"));
+    @Getter
+    private static final int windowHeight = Integer.parseInt(windowProperties.getProperty("windowHeight"));
+    @Getter
+    private static final int worldWidth = Integer.parseInt(windowProperties.getProperty("worldWidth"));
+    @Getter
+    private static final int worldHeight = Integer.parseInt(windowProperties.getProperty("worldHeight"));
+    @Getter
+    private static final String applicationName = windowProperties.getProperty("applicationName");
 
     private static Properties loadPropertiesFromFile(String fileName) {
         Properties configuration = new Properties();

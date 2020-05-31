@@ -8,8 +8,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.awt.*;
-
-import static com.github.LifeSimulation.utils.ResourcesLoader.*;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 @Data
 public class Statistics {
@@ -19,12 +20,19 @@ public class Statistics {
     private static Statistics INSTANCE;
 
     private Integer countOfLivingObjects = 0;
-    private Integer countOfDiedObjects = 0;
+    private Integer countOfDeadObjects = 0;
     private Integer year = 0;
 
-    private static final Integer LEFT_POSITION = getWorldWidth() + 10;
+    public static final Integer STATISTICS_WIDTH = 200;
+
+    private PrintWriter fileOutput;
 
     private Statistics() {
+        try {
+            fileOutput = new PrintWriter(new FileWriter("statistics.csv"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static Statistics getInstance() {
@@ -32,6 +40,13 @@ public class Statistics {
             INSTANCE = new Statistics();
         }
         return INSTANCE;
+    }
+
+    public void outputStatistics() {
+        fileOutput.print(countOfLivingObjects);
+        fileOutput.print(",");
+        fileOutput.println(countOfDeadObjects);
+        fileOutput.flush();
     }
 
     public void increaseCountOfLivingObjects(){
@@ -43,35 +58,38 @@ public class Statistics {
     }
 
     public void increaseCountOfDiedObjects(){
-        this.countOfDiedObjects++;
+        this.countOfDeadObjects++;
     }
 
     public void increaseYear(){
         this.year++;
     }
 
-    public void render(Graphics g, SimulationState state) {
+    public void render(Graphics g, Canvas canvas, SimulationState state) {
         g.setColor(Color.lightGray);
-        g.fillRect(getWorldWidth(), 0, getWindowWidth(), getWorldHeight());
+        int left_position = canvas.getWidth() - STATISTICS_WIDTH + 10;
+        g.fillRect(left_position - 10, 0, canvas.getWidth(), canvas.getHeight());
 
         g.setColor(Color.black);
 
         g.setFont(getHeaderFont());
-        g.drawString("------ STATISTICS ------", LEFT_POSITION, 30);
+        g.drawString("------ STATISTICS ------", left_position, 30);
 
         g.setFont(getRegularFont());
-        g.drawString("Simulation state: " + state.toString().toLowerCase(), LEFT_POSITION, 60);
-        g.drawString("Simulation year: " + year, LEFT_POSITION, 80);
+        g.drawString("Simulation state: " + state.toString().toLowerCase(), left_position, 60);
+        g.drawString("Simulation year: " + year, left_position, 80);
 
-        g.drawString("Living entities: " + countOfLivingObjects, LEFT_POSITION, 140);
-        g.drawString("Died entities: " + countOfDiedObjects, LEFT_POSITION, 160);
+        g.drawString("Living entities: " + countOfLivingObjects, left_position, 140);
+        g.drawString("Dead entities: " + countOfDeadObjects, left_position, 160);
 
         g.setFont(getHeaderFont());
-        g.drawString("----- INSTRUCTION -----", LEFT_POSITION, 500);
+        g.drawString("----- INSTRUCTION -----", left_position, 300);
 
         g.setFont(getRegularFont());
-        g.drawString("P - pause/run", LEFT_POSITION, 530);
-        g.drawString("A - add new entity", LEFT_POSITION, 550);
+        g.drawString("WASD/Arrows - move", left_position, 330);
+        g.drawString("Q, E - zoom", left_position, 350);
+        g.drawString("P - pause/run", left_position, 370);
+        g.drawString("O - add new entity", left_position, 390);
     }
 
     private Font getHeaderFont(){

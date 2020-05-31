@@ -21,9 +21,12 @@ public final class InputHandler implements KeyListener {
     private boolean isRightPressed = false;
     private boolean isUsePressed = false;
     private boolean isPausePressed = false;
-    private boolean isAPressed = false;
+    private boolean isOPressed = false;
     private boolean isOKPressed = false;
     private boolean isCancelPressed = false;
+    private boolean isQPressed = false;
+    private boolean isEPressed = false;
+
 
     private InputHandler() {
     }
@@ -46,7 +49,10 @@ public final class InputHandler implements KeyListener {
         isCancelPressed = keys[KeyEvent.VK_X];
         isUsePressed = keys[KeyEvent.VK_SPACE];
         isPausePressed = keys[KeyEvent.VK_P];
-        isAPressed = keys[KeyEvent.VK_A];
+        isOPressed = keys[KeyEvent.VK_O];
+
+        isQPressed = keys[KeyEvent.VK_Q];
+        isEPressed = keys[KeyEvent.VK_E];
     }
 
     @Override
