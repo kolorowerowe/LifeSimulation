@@ -3,7 +3,6 @@ package com.github.LifeSimulation.objects;
 import com.github.LifeSimulation.core.ObjectsManager;
 import com.github.LifeSimulation.core.Statistics;
 import com.github.LifeSimulation.environment.Environment;
-import javafx.scene.control.RadioMenuItem;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
@@ -25,6 +24,10 @@ public abstract class SimulationObject {
     private float velY;
     // radius (for collisions)
     private float radius;
+    // object's id, currently only used to prevent multiple collisions
+    private int id;
+    // next id, incremented at each object creation
+    private static int nextId = 0;
 
     protected Random random = new Random();
     protected Statistics statistics;
@@ -32,12 +35,13 @@ public abstract class SimulationObject {
     private boolean shouldBeRemoved = false;
 
     public SimulationObject(float radius) {
-        this.radius = radius;
-        //setRandomPosition();
         this.posX = 0;
         this.posY = 0;
         this.velX = 0;
         this.velY = 0;
+        this.radius = radius;
+        this.id = nextId;
+        nextId++;
         this.statistics = Statistics.getInstance();
     }
 
@@ -47,6 +51,8 @@ public abstract class SimulationObject {
         this.velX = 0;
         this.velY = 0;
         this.radius = radius;
+        this.id = nextId;
+        nextId++;
         this.statistics = Statistics.getInstance();
     }
 
@@ -71,8 +77,8 @@ public abstract class SimulationObject {
             posY = environment.getHeight() - radius;
             velY = -velY;
         }
-        velX *= 0.9f;
-        velY *= 0.9f;
+        velX *= 0.85f;
+        velY *= 0.85f;
     }
 
     public void setRandomPosition(){

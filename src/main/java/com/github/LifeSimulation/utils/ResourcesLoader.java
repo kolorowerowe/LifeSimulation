@@ -34,6 +34,14 @@ public class ResourcesLoader {
     @Getter
     private static final float maximumFoodOnTheGround = Float.parseFloat(simulationProperties.getProperty("maximumFoodOnTheGround"));
     @Getter
+    private static final float spatialIndexGridCellSize = Float.parseFloat(simulationProperties.getProperty("spatialIndexGridCellSize"));
+    @Getter
+    private static final float baseTickRate = Float.parseFloat(simulationProperties.getProperty("baseTickRate"));
+    @Getter
+    private static final int fastForwardSkipYears = Integer.parseInt(simulationProperties.getProperty("fastForwardSkipYears"));
+    @Getter
+    private static final String applicationName = windowProperties.getProperty("applicationName");
+    @Getter
     private static final int windowWidth = Integer.parseInt(windowProperties.getProperty("windowWidth"));
     @Getter
     private static final int windowHeight = Integer.parseInt(windowProperties.getProperty("windowHeight"));
@@ -42,7 +50,7 @@ public class ResourcesLoader {
     @Getter
     private static final int worldHeight = Integer.parseInt(windowProperties.getProperty("worldHeight"));
     @Getter
-    private static final String applicationName = windowProperties.getProperty("applicationName");
+    private static final float fpsTarget = Float.parseFloat(windowProperties.getProperty("fpsTarget"));
 
     private static Properties loadPropertiesFromFile(String fileName) {
         Properties configuration = new Properties();

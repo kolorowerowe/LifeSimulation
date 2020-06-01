@@ -46,9 +46,9 @@ public class SimpleEntity extends SimulationObject {
 
     // ----- Parameters - can be optimized in later stages of the project -----
     // how much food entity consumes by just living
-    private float energyDecayRate = 0.01f;
+    private float energyDecayRate = 0.1f;
     // how fast the entity can eat from the ground, faster eating is less efficient
-    private float foodConsumptionRate = 0.1f;
+    private float foodConsumptionRate = 1.f;
     // how low the energy drops before the entity decides to eat
     private float hungryThreshold = 20.f;
     // how low the energy can fall before the entity stops looking for a partner
@@ -58,7 +58,11 @@ public class SimpleEntity extends SimulationObject {
     // how much energy is used to create children, only half the energy is transferred into the child
     private float energyGivenToChild = 25.f;
     // how fast the entity can accelerate, faster moving entities lose more energy while moving and are less efficient
-    private float acceleration = 0.002f;
+    private float acceleration = 0.015f;
+
+    // for optimized drawing (avoid constantly creating new objects while drawing)
+    static Ellipse2D.Float circle = new Ellipse2D.Float();
+    static BasicStroke stroke = new BasicStroke(0);
 
     // ----- AI State - used to make decisions -----
     boolean currentlyLookingForFood = true;
@@ -212,9 +216,10 @@ public class SimpleEntity extends SimulationObject {
     }
 
     public void render(Graphics2D g2) {
-        g2.setStroke(new BasicStroke(0));
+        //Ellipse2D.Float circle = new Ellipse2D.Float(getPosX() - getRadius(), getPosY() - getRadius(), getRadius() * 2.f, getRadius() * 2.f);
+        circle.setFrame(getPosX() - getRadius(), getPosY() - getRadius(), getRadius() * 2.f, getRadius() * 2.f);
+        g2.setStroke(stroke);
         g2.setColor(color);
-        Ellipse2D.Float circle = new Ellipse2D.Float(getPosX() - getRadius(), getPosY() - getRadius(), getRadius() * 2.f, getRadius() * 2.f);
         g2.fill(circle);
     }
 

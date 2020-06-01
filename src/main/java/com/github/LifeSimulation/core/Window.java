@@ -16,14 +16,12 @@ public class Window extends Canvas {
     public Window() {
         frame = new JFrame(getApplicationName());
         frame.setSize(getWindowWidth(), getWindowHeight());
-        frame.setVisible(true);
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        //frame.setResizable(false);
-        frame.setVisible(true);
         frame.setAutoRequestFocus(true);
     }
 
     public void addCanvas(Canvas canvas) {
         frame.add(canvas);
+        frame.setVisible(true);
     }
 }

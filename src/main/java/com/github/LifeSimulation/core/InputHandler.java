@@ -27,6 +27,8 @@ public final class InputHandler implements KeyListener {
     private boolean isQPressed = false;
     private boolean isEPressed = false;
     private boolean isLPressed = false;
+    private boolean isPlusPressed = false;
+    private boolean isMinusPressed = false;
 
     private InputHandler() {
     }
@@ -55,6 +57,9 @@ public final class InputHandler implements KeyListener {
         isEPressed = keys[KeyEvent.VK_E];
 
         isLPressed = keys[KeyEvent.VK_L];
+
+        isPlusPressed = keys[KeyEvent.VK_EQUALS];
+        isMinusPressed = keys[KeyEvent.VK_MINUS];
     }
 
     @Override
