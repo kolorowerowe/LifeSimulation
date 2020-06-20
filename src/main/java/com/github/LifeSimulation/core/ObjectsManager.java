@@ -1,7 +1,7 @@
 package com.github.LifeSimulation.core;
 
 import com.github.LifeSimulation.environment.Environment;
-import com.github.LifeSimulation.objects.SimpleEntity;
+import com.github.LifeSimulation.objects.Herbivore;
 import com.github.LifeSimulation.objects.SimulationObject;
 import lombok.Getter;
 
@@ -39,7 +39,7 @@ public class ObjectsManager {
     }
 
     public void addObjectToSimulation() {
-        SimpleEntity entity = new SimpleEntity();
+        Herbivore entity = new Herbivore();
         entity.setRandomPosition();
         entity.setEnergy(10.f + random.nextFloat() * 20.f);
         entity.setAge(random.nextInt(30));
@@ -69,7 +69,7 @@ public class ObjectsManager {
         removedSimulationObjectList.clear();
         for (int i = 0; i < simulationObjectList.size(); ++i) {
             SimulationObject o1 = simulationObjectList.get(i);
-            spacialIndexGrid.executeAround(o1.getPosX(), o1.getPosY(), (SimulationObject o2) -> {
+            spacialIndexGrid.executeForEachAround(o1.getPosX(), o1.getPosY(), (SimulationObject o2) -> {
                 if (o1.getId() < o2.getId()) {
                     o1.collideWith(o2);
                 }
@@ -84,6 +84,10 @@ public class ObjectsManager {
         for (SimulationObject simulationObject : simulationObjectList) {
             simulationObject.render(g2);
         }
+    }
+
+    public SpacialIndexGrid getSpacialIndexGrid() {
+        return spacialIndexGrid;
     }
 }
 

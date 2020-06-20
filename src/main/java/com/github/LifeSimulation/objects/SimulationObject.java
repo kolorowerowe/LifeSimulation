@@ -17,13 +17,13 @@ import static com.github.LifeSimulation.utils.ResourcesLoader.*;
 @Log4j
 public abstract class SimulationObject {
     // position
-    private float posX;
-    private float posY;
+    protected float posX;
+    protected float posY;
     // velocity
-    private float velX;
-    private float velY;
+    protected float velX;
+    protected float velY;
     // radius (for collisions)
-    private float radius;
+    protected float radius;
     // object's id, currently only used to prevent multiple collisions
     private int id;
     // next id, incremented at each object creation

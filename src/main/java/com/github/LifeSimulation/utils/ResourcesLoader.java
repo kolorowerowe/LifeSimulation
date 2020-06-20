@@ -18,6 +18,10 @@ public class ResourcesLoader {
 
     // SIMULATION PROPERTIES
     @Getter
+    private static final int worldWidth = Integer.parseInt(simulationProperties.getProperty("worldWidth"));
+    @Getter
+    private static final int worldHeight = Integer.parseInt(simulationProperties.getProperty("worldHeight"));
+    @Getter
     private static final int initNumberOfSimpleEntities = Integer.parseInt(simulationProperties.getProperty("initNumberOfSimpleEntities"));
     @Getter
     private static final int ticksForYear = Integer.parseInt(simulationProperties.getProperty("ticksForYear"));
@@ -45,10 +49,6 @@ public class ResourcesLoader {
     private static final int windowWidth = Integer.parseInt(windowProperties.getProperty("windowWidth"));
     @Getter
     private static final int windowHeight = Integer.parseInt(windowProperties.getProperty("windowHeight"));
-    @Getter
-    private static final int worldWidth = Integer.parseInt(windowProperties.getProperty("worldWidth"));
-    @Getter
-    private static final int worldHeight = Integer.parseInt(windowProperties.getProperty("worldHeight"));
     @Getter
     private static final float fpsTarget = Float.parseFloat(windowProperties.getProperty("fpsTarget"));
 
