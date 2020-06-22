@@ -167,7 +167,7 @@ public class SimulationCore extends Canvas implements Runnable {
                 lastKeyTime = nowTime;
             }
             if (inputHandler.isOPressed()) {
-                objectsManager.addObjectToSimulation();
+                objectsManager.addHerbivore();
                 lastKeyTime = nowTime;
             }
 

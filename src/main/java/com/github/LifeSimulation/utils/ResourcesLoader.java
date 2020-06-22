@@ -22,7 +22,9 @@ public class ResourcesLoader {
     @Getter
     private static final int worldHeight = Integer.parseInt(simulationProperties.getProperty("worldHeight"));
     @Getter
-    private static final int initNumberOfSimpleEntities = Integer.parseInt(simulationProperties.getProperty("initNumberOfSimpleEntities"));
+    private static final int initNumberOfHerbivores = Integer.parseInt(simulationProperties.getProperty("initNumberOfHerbivores"));
+    @Getter
+    private static final int initNumberOfPredators = Integer.parseInt(simulationProperties.getProperty("initNumberOfPredators"));
     @Getter
     private static final int ticksForYear = Integer.parseInt(simulationProperties.getProperty("ticksForYear"));
     @Getter

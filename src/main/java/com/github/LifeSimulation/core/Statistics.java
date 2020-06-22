@@ -19,9 +19,13 @@ public class Statistics {
     @Setter(AccessLevel.NONE)
     private static Statistics INSTANCE;
 
-    private Integer countOfLivingObjects = 0;
-    private Integer countOfDeadObjects = 0;
-    private Integer year = 0;
+    private int countOfLivingObjects = 0;
+    private int countOfDeadObjects = 0;
+    private int countOfLivingHerbivores = 0;
+    private int countOfDeadHerbivores = 0;
+    private int countOfLivingPredators = 0;
+    private int countOfDeadPredators = 0;
+    private int year = 0;
 
     public static final Integer STATISTICS_WIDTH = 210;
 
@@ -42,23 +46,47 @@ public class Statistics {
         return INSTANCE;
     }
 
-    public void increaseCountOfLivingObjects(){
+    public void increaseCountOfLivingObjects() {
         this.countOfLivingObjects++;
     }
 
-    public void decreaseCountOfLivingObjects(){
+    public void decreaseCountOfLivingObjects() {
         this.countOfLivingObjects--;
     }
 
-    public void increaseCountOfDiedObjects(){
+    public void increaseCountOfDeadObjects() {
         this.countOfDeadObjects++;
     }
 
-    public void increaseYear(){
+    public void increaseCountOfLivingHerbivores() {
+        this.countOfLivingHerbivores++;
+    }
+
+    public void decreaseCountOfLivingHerbivores() {
+        this.countOfLivingHerbivores--;
+    }
+
+    public void increaseCountOfDeadHerbivores() {
+        this.countOfDeadHerbivores++;
+    }
+
+    public void increaseCountOfLivingPredators() {
+        this.countOfLivingPredators++;
+    }
+
+    public void decreaseCountOfLivingPredators() {
+        this.countOfLivingPredators--;
+    }
+
+    public void increaseCountOfDeadPredators() {
+        this.countOfDeadPredators++;
+    }
+
+    public void increaseYear() {
         this.year++;
-        fileOutput.print(countOfLivingObjects);
+        fileOutput.print(countOfLivingHerbivores);
         fileOutput.print(",");
-        fileOutput.println(countOfDeadObjects);
+        fileOutput.println(countOfLivingPredators);
         fileOutput.flush();
     }
 
@@ -77,8 +105,8 @@ public class Statistics {
         g.drawString("Speed: " + simulationSpeed + (isLagging ? " [LAG]" : ""), left_position, 80);
         g.drawString("Simulation year: " + year, left_position, 100);
 
-        g.drawString("Living entities: " + countOfLivingObjects, left_position, 160);
-        g.drawString("Dead entities: " + countOfDeadObjects, left_position, 180);
+        g.drawString("Herbivores: " + countOfLivingHerbivores, left_position, 160);
+        g.drawString("Predators: " + countOfLivingPredators, left_position, 180);
 
         g.setFont(getHeaderFont());
         g.drawString("---- INSTRUCTION ----", left_position, 300);
@@ -92,12 +120,12 @@ public class Statistics {
         g.drawString("+(=), -(_) - change speed", left_position, 430);
     }
 
-    private Font getHeaderFont(){
-        return new Font("Arial", Font.BOLD, 16 );
+    private Font getHeaderFont() {
+        return new Font("Arial", Font.BOLD, 16);
     }
 
-    private Font getRegularFont(){
-        return new Font("Arial", Font.PLAIN, 14 );
+    private Font getRegularFont() {
+        return new Font("Arial", Font.PLAIN, 14);
     }
 
 }

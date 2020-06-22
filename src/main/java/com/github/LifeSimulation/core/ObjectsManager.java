@@ -1,7 +1,9 @@
 package com.github.LifeSimulation.core;
 
 import com.github.LifeSimulation.environment.Environment;
+import com.github.LifeSimulation.objects.BreedingEntity;
 import com.github.LifeSimulation.objects.Herbivore;
+import com.github.LifeSimulation.objects.Predator;
 import com.github.LifeSimulation.objects.SimulationObject;
 import lombok.Getter;
 
@@ -32,17 +34,27 @@ public class ObjectsManager {
     }
 
     private void populateFromInitProperties() {
-        int numberOfSimpleEntities = getInitNumberOfSimpleEntities();
-        for (int i = 0; i < numberOfSimpleEntities; i++) {
-            addObjectToSimulation();
+        for (int i = 0; i < getInitNumberOfHerbivores(); i++) {
+            addHerbivore();
+        }
+        for (int i = 0; i < getInitNumberOfPredators(); i++) {
+            addPredator();
         }
     }
 
-    public void addObjectToSimulation() {
+    public void addHerbivore() {
         Herbivore entity = new Herbivore();
+        entity.setEnergy(40.f + random.nextFloat() * 20.f);
         entity.setRandomPosition();
-        entity.setEnergy(10.f + random.nextFloat() * 20.f);
-        entity.setAge(random.nextInt(30));
+        entity.setAge(random.nextInt(50));
+        addObjectToSimulation(entity);
+    }
+
+    public void addPredator() {
+        Predator entity = new Predator();
+        entity.setEnergy(100.f + random.nextFloat() * 400.f);
+        entity.setRandomPosition();
+        entity.setAge(random.nextInt(50));
         addObjectToSimulation(entity);
     }
 

@@ -18,7 +18,6 @@ public class Herbivore extends BreedingEntity {
     private static final Color COLOR_YOUNG_FEMALE = new Color(240, 180, 240);
     private static final Color COLOR_ADULT_FEMALE = new Color(220, 100, 200);
     private static final Color COLOR_OLD_FEMALE = new Color(150, 0, 150);
-    private static final Color COLOR_DEAD = Color.BLACK;
 
     // ----- Parameters - can be optimized in later stages of the project -----
     // how fast the entity can eat from the ground, faster eating is less efficient
@@ -33,7 +32,16 @@ public class Herbivore extends BreedingEntity {
     // ----- AI State - used to make decisions -----
     boolean currentlyLookingForFood = true;
     boolean currentlyEating = false;
+    boolean currentlyRunningFromPredator = false;
+    float runningFromX = 0.0f;
+    float runningFromY = 0.0f;
     int changeAngleCooldown = 0;
+    int predatorCheckDelay = 0;
+
+    public Herbivore() {
+        super();
+        statistics.increaseCountOfLivingHerbivores();
+    }
 
     @Override
     public BreedingEntity getOffspring(BreedingEntity other) {
@@ -71,13 +79,17 @@ public class Herbivore extends BreedingEntity {
             }
         }
         // try to breed
-        if (livingState == ALIVE_ADULT && energy > minimumBreedingThreshold && !currentlyLookingForFood) {
+        if (livingState == ALIVE_ADULT && energy > minimumBreedingThreshold && !currentlyLookingForFood && !currentlyRunningFromPredator) {
             setCurrentlyLookingForPartner(true);
         }
         if (changeAngleCooldown > 0) {
             // keep current direction
-            if (!currentlyEating) {
-                moveInDirection(getVelX(), getVelY());
+            if (!currentlyRunningFromPredator) {
+                if (!currentlyEating) {
+                    moveInDirection(getVelX(), getVelY(), acceleration);
+                }
+            } else {
+                moveInDirection(posX - runningFromX, posY - runningFromY, acceleration);
             }
             changeAngleCooldown--;
         } else {
@@ -88,8 +100,41 @@ public class Herbivore extends BreedingEntity {
             } else {
                 angle = (float) (Math.PI * 2 * random.nextFloat());
             }
-            moveInDirection((float) Math.cos(angle), (float) Math.sin(angle));
+            moveInDirection((float) Math.cos(angle), (float) Math.sin(angle), acceleration);
             changeAngleCooldown = 40 + random.nextInt(80);
+        }
+    }
+
+    @Override
+    public void tick(Environment environment, ObjectsManager objectsManager) {
+        super.tick(environment, objectsManager);
+        if (predatorCheckDelay > 0) {
+            predatorCheckDelay--;
+        } else {
+            class SearchData {
+                float sumX = 0;
+                float sumY = 0;
+                int count = 0;
+            }
+            SearchData temp = new SearchData();
+            objectsManager.getSpacialIndexGrid().executeForEachInRadius(posX, posY, 6.0f,
+                    (simulationObject, radiusSqr) -> {
+                        if (simulationObject instanceof Predator) {
+                            temp.sumX += simulationObject.posX;
+                            temp.sumY += simulationObject.posY;
+                            temp.count++;
+                        }
+                    });
+            if (temp.count > 0) {
+                currentlyRunningFromPredator = true;
+                setCurrentlyLookingForPartner(false);
+                runningFromX = temp.sumX / temp.count;
+                runningFromY = temp.sumY / temp.count;
+                predatorCheckDelay = 4 + random.nextInt(4);
+            } else {
+                currentlyRunningFromPredator = false;
+                predatorCheckDelay = 10 + random.nextInt(10);
+            }
         }
     }
 
@@ -116,5 +161,14 @@ public class Herbivore extends BreedingEntity {
         } else {
             return Color.BLACK;
         }
+    }
+
+    @Override
+    public void die() {
+        if (livingState != DEAD) {
+            statistics.decreaseCountOfLivingHerbivores();
+            statistics.increaseCountOfDeadHerbivores();
+        }
+        super.die();
     }
 }

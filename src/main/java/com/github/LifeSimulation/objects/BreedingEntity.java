@@ -4,7 +4,6 @@ import com.github.LifeSimulation.core.ObjectsManager;
 import com.github.LifeSimulation.enums.Gender;
 import com.github.LifeSimulation.enums.LivingState;
 import com.github.LifeSimulation.environment.Environment;
-import com.github.LifeSimulation.environment.TerrainCell;
 import com.github.LifeSimulation.utils.ResourcesLoader;
 import lombok.Data;
 import lombok.extern.log4j.Log4j;
@@ -38,7 +37,7 @@ abstract public class BreedingEntity extends SimulationObject {
     // current energy, when drops to 0, the entity dies
     protected float energy = 20.f;
     // body integrity, determines how damaged the entity is
-    protected float bodyIntegrity = 1.f;
+    protected float bodyIntegrity = 400.f;
 
     // ----- Parameters - can be optimized in later stages of the project -----
     // how much food entity consumes by just living
@@ -46,16 +45,18 @@ abstract public class BreedingEntity extends SimulationObject {
     // how fast the entity can accelerate, faster moving entities lose more energy while moving and are less efficient
     protected float acceleration = 0.015f;
     // how much energy is used to create children, only half the energy is transferred into the child
-    private float energyGivenToChild = 25.f;
+    protected float energyGivenToChild = 25.f;
     // body size, determines maximum body integrity, how much food is in the entity and display radius
-    protected float bodySize = 1.f;
+    protected float bodySize = 400.f;
 
     private boolean currentlyLookingForPartner = false;
     private BreedingEntity chasedPartner = null;
     private float partnerSearchRange = BASE_SEARCH_RANGE;
 
     private static final float BASE_SEARCH_RANGE = 8.f;
-    private static final float SEARCH_RANGE_INCREMENT = 4.f;
+    private static final float SEARCH_RANGE_INCREMENT = 8.f;
+    private static final float SEARCH_RANGE_MAX = 80.f;
+    private static final float HEALING_RATE = 0.001f;
 
     // for optimized drawing (avoid constantly creating new objects while drawing)
     static Ellipse2D.Float circle = new Ellipse2D.Float();
@@ -81,8 +82,19 @@ abstract public class BreedingEntity extends SimulationObject {
 
     abstract public void nonBreedingTick(Environment environment, ObjectsManager objectsManager);
 
+    // Attack the entity by the value, subtracts the body integrity, kills if  necessary, returns true if killed
+    public boolean attack(float value) {
+        bodyIntegrity -= value;
+        if (bodyIntegrity <= 0f) {
+            die();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     // Moves in the direction, normalized to entity's speed
-    public void moveInDirection(float directionX, float directionY) {
+    public void moveInDirection(float directionX, float directionY, float acceleration) {
         float norm = (float) Math.sqrt(directionX * directionX + directionY * directionY);
         if (norm == 0) {
             return;
@@ -118,18 +130,22 @@ abstract public class BreedingEntity extends SimulationObject {
             if (energy <= 0) {
                 die();
             }
+            if (bodyIntegrity < bodySize) {
+                bodyIntegrity += HEALING_RATE * bodySize;
+                if (bodyIntegrity > bodySize) {
+                    bodyIntegrity = bodySize;
+                }
+            }
             if (currentlyLookingForPartner) {
                 // only do this with some random chance, should be enough to make things relatively responsive
                 // will avoid computationally expensive searching each tick
-                if (random.nextInt(10) == 0) {
-
-                    class LambdasAreStupidInJavaShouldHaveusedCpp {
+                if (random.nextInt(20) == 0) {
+                    class SearchData {
                         BreedingEntity chasedPartner = null;
                         float bestSquareDistance = 1e38f;
-                        int counter = 0;
                     }
 
-                    LambdasAreStupidInJavaShouldHaveusedCpp temp = new LambdasAreStupidInJavaShouldHaveusedCpp();
+                    SearchData temp = new SearchData();
 
                     objectsManager.getSpacialIndexGrid().executeForEachInRadius(posX, posY, partnerSearchRange,
                             (simulationObject, radiusSqr) -> {
@@ -140,12 +156,10 @@ abstract public class BreedingEntity extends SimulationObject {
                                         temp.bestSquareDistance = radiusSqr;
                                     }
                                 }
-                                temp.counter++;
                             });
 
                     chasedPartner = temp.chasedPartner;
                     if (chasedPartner != null) {
-                        //log.info("found partner, range: " + partnerSearchRange);
                         // If they're close, they can breed
                         if (temp.bestSquareDistance < 1.5f * (radius + chasedPartner.radius)) {
                             BreedingEntity child = getOffspring(chasedPartner);
@@ -157,24 +171,25 @@ abstract public class BreedingEntity extends SimulationObject {
                             chasedPartner.energy -= chasedPartner.energyGivenToChild;
                             chasedPartner.currentlyLookingForPartner = false;
                             chasedPartner.partnerSearchRange = BASE_SEARCH_RANGE;
-                            chasedPartner.chasedPartner = null;
                             currentlyLookingForPartner = false;
                             partnerSearchRange = BASE_SEARCH_RANGE;
-                            chasedPartner = null;
                         }
                     } else {
-                        partnerSearchRange += SEARCH_RANGE_INCREMENT;
+                        if (partnerSearchRange < SEARCH_RANGE_MAX) {
+                            partnerSearchRange += SEARCH_RANGE_INCREMENT;
+                        }
                     }
                 }
                 if (livingState != ALIVE_ADULT || !doKeepLookingForPartner()) {
                     currentlyLookingForPartner = false;
-                    chasedPartner = null;
                     partnerSearchRange = BASE_SEARCH_RANGE;
                 }
+            } else {
+                chasedPartner = null;
             }
             if (chasedPartner != null) {
                 // go towards chased entity (breeding partner)
-                moveInDirection(chasedPartner.getPosX() - getPosX(), chasedPartner.getPosY() - getPosY());
+                moveInDirection(chasedPartner.getPosX() - getPosX(), chasedPartner.getPosY() - getPosY(), acceleration);
             } else {
                 nonBreedingTick(environment, objectsManager);
             }
@@ -195,6 +210,15 @@ abstract public class BreedingEntity extends SimulationObject {
         g2.fill(circle);
     }
 
+    public void die() {
+        if (livingState != DEAD) {
+            livingState = DEAD;
+            color = getColorBasedOnAgeAndGender(livingState, gender);
+            super.statistics.decreaseCountOfLivingObjects();
+            super.statistics.increaseCountOfDeadObjects();
+        }
+    }
+
     private void init() {
         this.livingState = ALIVE_YOUNG;
         this.gender = getRandomGender();
@@ -209,13 +233,6 @@ abstract public class BreedingEntity extends SimulationObject {
     private boolean shouldDie(int maxLifeAge) {
         double probabilityToDie = 1.0 / (maxLifeAge - age);
         return random.nextDouble() < probabilityToDie;
-    }
-
-    private void die() {
-        livingState = DEAD;
-        color = getColorBasedOnAgeAndGender(livingState, gender);
-        super.statistics.decreaseCountOfLivingObjects();
-        super.statistics.increaseCountOfDiedObjects();
     }
 
 }
