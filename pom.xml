@@ -5,7 +5,7 @@
 
     <groupId>com.github</groupId>
     <artifactId>LifeSimulation</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
     <build>
         <plugins>
             <plugin>
@@ -85,12 +85,12 @@
                                 <jdkPreference>preferJre</jdkPreference>
                             </jre>
                             <versionInfo>
-                                <fileVersion>1.0.0.0</fileVersion>
+                                <fileVersion>1.1.0.0</fileVersion>
                                 <txtFileVersion>${project.version}</txtFileVersion>
                                 <fileDescription>${project.name}</fileDescription>
                                 <copyright>2020 AGH</copyright>
-                                <productVersion>1.0.0.0</productVersion>
-                                <txtProductVersion>1.0.0.0</txtProductVersion>
+                                <productVersion>1.1.0.0</productVersion>
+                                <txtProductVersion>1.1.0.0</txtProductVersion>
                                 <productName>${project.name}</productName>
                                 <companyName>AGH</companyName>
                                 <internalName>lifesimulation</internalName>
